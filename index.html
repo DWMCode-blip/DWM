@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Web Market - D.W.M</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #000000;
+            color: #cccccc;
+            font-family: 'Courier New', Courier, monospace;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+        }
+
+        /* Ocultar secciones dinámicamente */
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- ESTILOS DE TÍTULOS --- */
+        .header-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .main-title {
+            color: #ff0033;
+            font-size: 2rem;
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+
+        .sub-title-full {
+            color: #cccccc;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            color: #cccccc;
+            font-size: 1.3rem;
+            margin: 20px 0 15px 0;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* --- CONTENEDORES Y TARJETAS --- */
+        .card-box {
+            background-color: #050505;
+            border: 1px solid #cccccc;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- FORMULARIOS Y BOTONES --- */
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            background-color: #000000;
+            border: 1px solid #cccccc;
+            color: #cccccc;
+            padding: 12px;
+            width: 100%;
+            margin-bottom: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #ff0033;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            color: #cccccc;
+        }
+
+        .checkbox-container input {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .link-text {
+            color: #3399ff;
+            cursor: pointer;
+            text-decoration: underline;
+            background: none;
+            border: none;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            padding: 0;
+            display: inline;
+        }
+
+        .link-text:hover {
+            color: #66b2ff;
+        }
+
+        /* Botones negros con borde y texto blanco apagado */
+        .btn-dwm {
+            background-color: #000000;
+            color: #cccccc;
+            border: 1px solid #cccccc;
+            padding: 12px;
+            width: 100%;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.2s, color 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .btn-dwm:hover {
+            background-color: #cccccc;
+            color: #000000;
+        }
+
+        .error-msg {
+            color: #ff0033;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* --- INTERFAZ DE PRODUCTOS (PAYASOS) --- */
+        .market-container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .clown-card {
+            background-color: #050505;
+            border: 1px solid #333;
+            display: flex;
+            flex-direction: row; 
+            align-items: stretch;
+            padding: 0;
+            overflow: hidden;
+            gap: 20px;
+        }
+
+        .clown-img {
+            width: 320px;
+            height: 350px;
+            object-fit: cover;
+            border: none;
+            background-color: #000;
+            flex-shrink: 0;
+        }
+
+        .clown-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px 20px 20px 0;
+        }
+
+        .clown-name {
+            color: #cccccc;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .clown-details {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .danger-box {
+            background-color: rgba(255, 0, 51, 0.1);
+            border-left: 3px solid #ff0033;
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            color: #ff8099;
+            margin-top: 5px;
+        }
+
+        /* --- SECCIÓN DE LA CASA Y OPCIONES --- */
+        .options-section {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 10px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+        }
+
+        .house-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 15px;
+        }
+
+        .house-room {
+            background-color: #050505;
+            border: 1px solid #cccccc;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .house-room:hover {
+            border-color: #ff0033;
+            background-color: #0a0002;
+        }
+
+        .back-btn {
+            margin-bottom: 20px;
+            width: auto;
+            padding: 8px 15px;
+        }
+
+        /* --- VISTA DE CÁMARA (TELEVISOR CENTRADO) --- */
+        #camara-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #000000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABECERA GENERAL -->
+    <div class="header-container">
+        <h1 class="main-title">D.W.M</h1>
+        <div class="sub-title-full">Deep Web Market</div>
+    </div>
+
+    <!-- 1. SECCIÓN DE LOGIN / REGISTRO -->
+    <div id="auth-section" class="card-box">
+        <form id="auth-form" onsubmit="handleAuth(event)">
+            <h3 id="form-title" style="margin-bottom: 15px; color: #cccccc; font-size: 1rem; text-align: center;">INICIAR SESIÓN</h3>
+            
+            <input type="email" id="email" placeholder="Correo electrónico" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+
+            <div class="checkbox-container">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">Acepto los <button type="button" class="link-text" onclick="alert('Términos: Todo lo que compres aquí queda bajo tu total responsabilidad y riesgo de desaparición.')">términos y condiciones</button></label>
+            </div>
+
+            <button type="submit" class="btn-dwm" id="submit-btn">Ingresar</button>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <span id="switch-text" style="font-size: 0.85rem;">¿No estás registrado?</span>
+                <button type="button" class="link-text" id="switch-btn" onclick="toggleAuthMode()">Registrarse</button>
+            </div>
+
+            <div id="auth-error" class="error-msg"></div>
+        </form>
+    </div>
+
+    <!-- 2. MENÚ PRINCIPAL (VENTAS) -->
+    <div id="menu-section" class="market-container hidden">
+        <div class="section-title">Ventas</div>
+
+        <!-- Payaso 1: El Sonrisas -->
+        <div class="clown-card">
+            <img src="assets/sonrisas.jpg" alt="El Sonrisas" class="clown-img" onerror="this.src='https://via.placeholder.com/320x350/000/333?text=Falta+sonrisas.jpg'">
+            <div class="clown-info">
+                <div class="clown-name">El Sonrisas</div>
+                <div class="clown-details">Edad: Desconocida | Peso: 78 kg</div>
+                <div class="danger-box">⚠️ PELIGRO: No le des de comer dulces después de la medianoche o intentará abrir la puerta desde adentro.</div>
+                <button class="btn-dwm" style="margin-top: 5px; padding: 10px;" onclick="comprarItem('El Sonrisas')">Comprar</button>
+            </div>
+        </div>
+
+        <!-- Payaso 2: El Sombra -->
+        <div class="clown-card">
+            <img src="assets/sombra.jpg" alt="El Sombra" class="clown-img" onerror="this.src='https://via.placeholder.com/320x350/000/333?text=Falta+sombra.jpg'">
+            <div class="clown-info">
+                <div class="clown-name">El Sombra</div>
+                <div class="clown-details">Edad: 112 años | Peso: 62 kg</div>
+                <div class="danger-box">⚠️ PELIGRO: Mantener siempre la jaula en completa oscuridad. Si recibe luz directa, grita nombres que no querés escuchar.</div>
+                <button class="btn-dwm" style="margin-top: 5px; padding: 10px;" onclick="comprarItem('El Sombra')">Comprar</button>
+            </div>
+        </div>
+
+        <!-- Payaso 3: Gluw -->
+        <div class="clown-card">
+            <img src="assets/gluw.jpg" alt="Gluw" class="clown-img" onerror="this.src='https://via.placeholder.com/320x350/000/333?text=Falta+gluw.jpg'">
+            <div class="clown-info">
+                <div class="clown-name">Gluw</div>
+                <div class="clown-details">Edad: 5 años (Apariencia) | Peso: 40 kg</div>
+                <div class="danger-box">⚠️ PELIGRO: Emite ruidos extraños metálicos. No dejar objetos filosos cerca del vidrio de contención.</div>
+                <button class="btn-dwm" style="margin-top: 5px; padding: 10px;" onclick="comprarItem('Gluw')">Comprar</button>
+            </div>
+        </div>
+
+        <!-- Payaso 4: SATAN -->
+        <div class="clown-card">
+            <img src="assets/satan.jpg" alt="SATAN" class="clown-img" onerror="this.src='https://via.placeholder.com/320x350/000/333?text=Falta+satan.jpg'">
+            <div class="clown-info">
+                <div class="clown-name" style="color: #ff0033;">SATAN</div>
+                <div class="clown-details">Edad: Eterna | Peso: ???</div>
+                <div class="danger-box">⚠️ PELIGRO EXTREMO: Entidad de máxima alerta. No mirar fijamente a sus cuencas vacías por más de 10 segundos seguidos.</div>
+                <button class="btn-dwm" style="margin-top: 5px; padding: 10px;" onclick="comprarItem('SATAN')">Comprar</button>
+            </div>
+        </div>
+
+        <!-- MÁS OPCIONES -->
+        <div class="options-section">
+            <div class="section-title" style="margin-top: 0;">Más opciones</div>
+            <div style="display: flex; gap: 15px;">
+                <button class="btn-dwm" onclick="irACasa()">Ver casa</button>
+                <button class="btn-dwm" onclick="alert('Sección de niveles bloqueada temporalmente por seguridad de la red.')">Niveles</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. SECCIÓN: VER CASA -->
+    <div id="house-section" class="market-container hidden">
+        <button class="btn-dwm back-btn" onclick="volverAlMenu()">← Volver al Menú</button>
+        <div class="section-title" style="margin-top: 0;">Monitoreo de la Casa</div>
+        <p style="font-size: 0.85rem; margin-bottom: 15px; color: #888;">Seleccioná una zona para ver el estado de las cámaras de seguridad:</p>
+        
+        <div class="house-grid">
+            <div class="house-room" onclick="abrirCamara('comedor')">Comedor</div>
+            <div class="house-room" onclick="abrirCamara('cocina')">Cocina</div>
+            <div class="house-room" onclick="abrirCamara('habitacion1')">Habitación 1</div>
+            <div class="house-room" onclick="abrirCamara('habitacion2')">Habitación 2</div>
+            <div class="house-room" onclick="abrirCamara('bano')">Baño</div>
+            <div class="house-room" onclick="abrirCamara('patio')">Patio</div>
+        </div>
+    </div>
+
+    <!-- 4. VISTA DE CÁMARA DINÁMICA -->
+    <div id="camara-section" class="hidden">
+        <div>
+            <button class="btn-dwm back-btn" onclick="cerrarCamara()">← Volver a la Casa</button>
+        </div>
+        <div></div> <!-- Espaciador para empujar el botón arriba y la tele abajo -->
+        <div></div>
+    </div>
+
+    <script>
+        let isRegistering = false;
+
+        // Verificar si ya hay una sesión guardada al cargar la página
+        window.onload = function() {
+            let savedUser = localStorage.getItem("dwm_user");
+            if (savedUser) {
+                mostrarMenu();
+            }
+        };
+
+        function toggleAuthMode() {
+            isRegistering = !isRegistering;
+            let title = document.getElementById("form-title");
+            let btn = document.getElementById("submit-btn");
+            let switchText = document.getElementById("switch-text");
+            let switchBtn = document.getElementById("switch-btn");
+
+            if (isRegistering) {
+                title.innerText = "REGISTRAR SESIÓN";
+                btn.innerText = "Registrarse";
+                switchText.innerText = "¿Ya estás registrado?";
+                switchBtn.innerText = "Iniciar sesión";
+            } else {
+                title.innerText = "INICIAR SESIÓN";
+                btn.innerText = "Ingresar";
+                switchText.innerText = "¿No estás registrado?";
+                switchBtn.innerText = "Registrarse";
+            }
+        }
+
+        function handleAuth(event) {
+            event.preventDefault();
+            let email = document.getElementById("email").value;
+            let errorDiv = document.getElementById("auth-error");
+
+            if (!document.getElementById("terms").checked) {
+                errorDiv.innerText = "Debes aceptar los términos y condiciones.";
+                return;
+            }
+
+            // Guardar sesión en el almacenamiento local del navegador
+            localStorage.setItem("dwm_user", email);
+            errorDiv.innerText = "";
+            mostrarMenu();
+        }
+
+        function mostrarMenu() {
+            document.getElementById("auth-section").classList.add("hidden");
+            document.getElementById("house-section").classList.add("hidden");
+            document.getElementById("camara-section").classList.add("hidden");
+            document.getElementById("menu-section").classList.remove("hidden");
+        }
+
+        function irACasa() {
+            document.getElementById("menu-section").classList.add("hidden");
+            document.getElementById("house-section").classList.remove("hidden");
+        }
+
+        function volverAlMenu() {
+            document.getElementById("house-section").classList.add("hidden");
+            document.getElementById("menu-section").classList.remove("hidden");
+        }
+
+        function abrirCamara(zona) {
+            let camaraSection = document.getElementById("camara-section");
+            // Asigna la imagen de la zona seleccionada
+            camaraSection.style.backgroundImage = `url('assets/${zona}.jpg')`;
+            
+            document.getElementById("house-section").classList.add("hidden");
+            camaraSection.classList.remove("hidden");
+        }
+
+        function cerrarCamara() {
+            document.getElementById("camara-section").classList.add("hidden");
+            document.getElementById("house-section").classList.remove("hidden");
+        }
+
+        function comprarItem(nombrePayaso) {
+            alert(`¡Compra exitosa! Has adquirido a [${nombrePayaso}]. Los documentos de transferencia han sido enviados a la red oculta.`);
+        }
+    </script>
+</body>
+</html>
